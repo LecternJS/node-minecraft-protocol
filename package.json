@@ -4,10 +4,7 @@
   "description": "Parse and serialize minecraft packets, plus authentication and encryption.",
   "main": "src/index.js",
   "types": "src/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/PrismarineJS/node-minecraft-protocol.git"
-  },
+  "repository": "git://github.com/LecternJS/node-minecraft-protocol.git",
   "scripts": {
     "prepare": "npm install require-self && require-self",
     "test": "mocha --recursive --reporter spec --exit",
@@ -26,7 +23,7 @@
     "encrypton",
     "bot"
   ],
-  "author": "Andrew Kelley",
+  "author": "Jordan \"Kashalls\" Jones",
   "license": "BSD-3-Clause",
   "engines": {
     "node": ">=6"
@@ -34,6 +31,8 @@
   "browser": "src/browser.js",
   "devDependencies": {
     "@types/node": "^14.0.1",
+    "eslint": "^7.17.0",
+    "eslint-config-kashall": "github:Kashalls/kashall-lint",
     "espower-loader": "^1.0.0",
     "intelli-espower-loader": "^1.0.0",
     "minecraft-wrap": "^1.2.3",
