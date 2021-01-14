@@ -1,69 +1,86 @@
-'use strict'
+/* eslint-disable no-new */
+'use strict';
 
-const Client = require('./client')
-const states = require('./states')
-const tcpDns = require('./client/tcp_dns')
+const minecraftData = require('minecraft-data');
 
-module.exports = ping
+const Client = require('./BaseClient');
+const Util = require('./Util/Util');
+const Constants = require('./Util/Constants');
+const TCP = require('./Client/TCP');
 
-function ping (options, cb) {
-  options.host = options.host || 'localhost'
-  options.port = options.port || 25565
-  const optVersion = options.version || require('./version').defaultVersion
-  const mcData = require('minecraft-data')(optVersion)
-  const version = mcData.version
-  options.majorVersion = version.majorVersion
-  options.protocolVersion = version.version
-  let closeTimer = null
-  options.closeTimeout = options.closeTimeout || 120 * 1000
-  options.noPongTimeout = options.noPongTimeout || 5 * 1000
+class Ping {
 
-  const client = new Client(false, version.minecraftVersion)
-  client.on('error', function (err) {
-    clearTimeout(closeTimer)
-    cb(err)
-  })
+	constructor(options = {}) {
+		if (!Util.isObject(options)) throw new TypeError('Ping constructur requires an object!');
+		this.options = Util.mergeDefault(Constants.PING, options);
 
-  client.once('server_info', function (packet) {
-    const data = JSON.parse(packet.response)
-    const start = Date.now()
-    const maxTime = setTimeout(() => {
-      clearTimeout(closeTimer)
-      cb(null, data)
-      client.end()
-    }, options.noPongTimeout)
-    client.once('ping', function (packet) {
-      data.latency = Date.now() - start
-      clearTimeout(maxTime)
-      clearTimeout(closeTimer)
-      cb(null, data)
-      client.end()
-    })
-    client.write('ping', { time: [0, 0] })
-  })
+		const { version } = minecraftData(options.version);
+		if (!version) throw new Error(`Unsupported Protocol Version: ${options.version}`);
+		this.version = version;
 
-  client.on('state', function (newState) {
-    if (newState === states.STATUS) { client.write('ping_start', {}) }
-  })
+		this.closeTimer = null;
 
-  // TODO: refactor with src/client/setProtocol.js
-  client.on('connect', function () {
-    client.write('set_protocol', {
-      protocolVersion: options.protocolVersion,
-      serverHost: options.host,
-      serverPort: options.port,
-      nextState: 1
-    })
-    client.state = states.STATUS
-  })
+		this.ping();
+	}
 
-  // timeout against servers that never reply while keeping
-  // the connection open and alive.
-  closeTimer = setTimeout(function () {
-    client.end()
-    cb(new Error('ETIMEDOUT'))
-  }, options.closeTimeout)
+	ping() {
+		this.client = new Client(false, this.version.minecraftVersion);
 
-  tcpDns(client, options)
-  options.connect(client)
+		this.client.on('server_info', this.serverInfo);
+		this.client.on('error', this.error);
+		this.client.on('state', this.state);
+		this.client.on('connect', this.connect);
+
+		this.closeTimer = setTimeout(() => {
+			this.client.end();
+			console.error(`[Ping] Ping request timed out. Recieved no response in the last ${this.options.closeTimeout}ms.`);
+		}, this.options.closeTimeout);
+
+		// Proceed with connecting anyways...
+		new TCP(this);
+	}
+
+	serverInfo(packet) {
+		packet = JSON.parse(packet.response);
+		const start = Date.now();
+
+		this.timeout = setTimeout(() => {
+			if (this.closeTimer) clearTimeout(this.closeTimer);
+			this.client.end();
+			return packet;
+		}, this.options.noPongTimeout);
+
+		this.client.once('ping', () => {
+			packet.latency = Date.now() - start;
+			if (this.closeTimer) clearTimeout(this.closeTimer);
+			if (this.timeout) clearTimeout(this.timeout);
+			this.client.end();
+			return packet;
+		});
+
+		this.client.write('ping', { time: [0, 0] });
+	}
+
+	// eslint-disable-next-line consistent-return
+	state(state) {
+		if (state === Constants.STATES.STATUS) return this.client.write('ping_start', {});
+	}
+
+	error(error) {
+		if (this.closeTimer) clearTimeout(this.closeTimer);
+		return error;
+	}
+
+	connect() {
+		this.client.write('set_protocol', {
+			protocolVersion: this.options.protocolVersion,
+			serverHost: this.options.host,
+			serverPort: this.options.port,
+			nextState: 1
+		});
+		return this.client.state === Constants.STATES.STATUS;
+	}
+
 }
+
+module.exports = Ping;
