@@ -817,9 +817,10 @@ escope@^3.3.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-kashall@Kashalls/kashall-lint:
+"eslint-config-kashall@github:Kashalls/kashall-lint":
   version "4.2.0"
-  resolved "https://codeload.github.com/Kashalls/kashall-lint/tar.gz/f5808358642e66396ec0122846e55c572de42a07"
+  uid c54ed45b9c2ddd91495946601f7d88c68e8d89d5
+  resolved "https://codeload.github.com/Kashalls/kashall-lint/tar.gz/c54ed45b9c2ddd91495946601f7d88c68e8d89d5"
 
 eslint-config-standard-jsx@10.0.0:
   version "10.0.0"
@@ -1763,9 +1764,9 @@ lodash.reduce@^4.6.0:
   integrity sha1-8atrg5KZrUj3hKu/R2WW8DuRTTs=
 
 lodash@^4.17.14, lodash@^4.17.19, lodash@^4.17.20:
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
-  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 log-symbols@4.0.0:
   version "4.0.0"
