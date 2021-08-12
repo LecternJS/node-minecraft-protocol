@@ -817,9 +817,10 @@ escope@^3.3.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-kashall@Kashalls/kashall-lint:
+"eslint-config-kashall@github:Kashalls/kashall-lint":
   version "4.2.0"
-  resolved "https://codeload.github.com/Kashalls/kashall-lint/tar.gz/f5808358642e66396ec0122846e55c572de42a07"
+  uid f339fbdaf31896e6398b038c51c513d5e0b9da18
+  resolved "https://codeload.github.com/Kashalls/kashall-lint/tar.gz/f339fbdaf31896e6398b038c51c513d5e0b9da18"
 
 eslint-config-standard-jsx@10.0.0:
   version "10.0.0"
@@ -2160,9 +2161,9 @@ path-key@^3.1.0:
   integrity sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-type@^2.0.0:
   version "2.0.0"
